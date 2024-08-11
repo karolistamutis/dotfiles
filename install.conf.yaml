@@ -1,0 +1,17 @@
+- defaults:
+    link:
+      relink: true
+      create: true
+
+- clean: ['~']
+
+- link:
+    ~/.zshrc: zshrc
+    ~/.tmux.conf: tmux.conf
+    ~/.oh-my-zsh/custom/themes: oh-my-zsh/custom/themes
+    ~/.config/aerospace: config/aerospace
+    ~/.config/alacritty: config/alacritty
+    ~/.config/nvim: config/nvim
+
+- shell:
+    - [git submodule update --init --recursive, Installing submodules]
