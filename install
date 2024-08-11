@@ -1,14 +1,33 @@
 #!/usr/bin/env bash
 set -e
 
+BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONFIG="install.conf.yaml"
 DOTBOT_DIR="dotbot"
-
 DOTBOT_BIN="bin/dotbot"
-BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 cd "${BASEDIR}"
 git -C "${DOTBOT_DIR}" submodule sync --quiet --recursive
 git submodule update --init --recursive "${DOTBOT_DIR}"
 
-"${BASEDIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASEDIR}" -c "${CONFIG}" "${@}"
+# Function to run Dotbot
+run_dotbot() {
+  "${BASEDIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASEDIR}" -c "$1"
+}
+
+# Base configuration
+run_dotbot "${CONFIG}"
+
+# Environment-specific configuration
+if [ "$1" = "desktop" ]; then
+  echo "Setting up desktop environment"
+  run_dotbot "install.desktop.yaml"
+elif [ "$1" = "server" ]; then
+  echo "Setting up server environment"
+  run_dotbot "install.server.yaml"
+elif [ -z "$1" ]; then
+  echo "No environment specified. Running base configuration only."
+else
+  echo "Usage: ./install [desktop|server]"
+  echo "No environment-specific configuration applied."
+fi

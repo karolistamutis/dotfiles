@@ -8,9 +8,6 @@
 - link:
     ~/.zshrc: zshrc
     ~/.tmux.conf: tmux.conf
-    ~/.oh-my-zsh/custom/themes: oh-my-zsh/custom/themes
-    ~/.config/aerospace: config/aerospace
-    ~/.config/alacritty: config/alacritty
     ~/.config/nvim: config/nvim
 
 - shell:

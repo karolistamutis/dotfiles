@@ -1,0 +1,2 @@
+- shell:
+    - [echo "Setting up server-specific configurations", Setting up server]

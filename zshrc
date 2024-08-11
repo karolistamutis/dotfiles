@@ -3,7 +3,7 @@ export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:/opt/homebrew/bin:/opt/hom
 
 # Oh My Zsh configuration
 export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="catppuccin-russell"
+ZSH_THEME="robbyrussell"
 HIST_STAMPS="yyyy-mm-dd"
 
 # Plugins

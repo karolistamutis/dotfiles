@@ -1,0 +1,6 @@
+- link:
+    ~/.config/aerospace: config/aerospace
+    ~/.config/alacritty: config/alacritty
+
+- shell:
+    - [echo "Setting up desktop-specific configurations", Setting up desktop]
