@@ -61,6 +61,18 @@ alt-shift-j = ['join-with down', 'mode main']
 alt-shift-k = ['join-with up', 'mode main']
 alt-shift-l = ['join-with right', 'mode main']
 
+# Workspace to monitor assignments
+[workspace-to-monitor-force-assignment]
+'0:streaming' = '^built-in retina display$'
+'1:web' = '^studio display$'
+'2:term' = '^studio display$'
+'3:ide' = '^studio display$'
+'4:devtools' = '^studio display$'
+'5:planning' = '^studio display$'
+'6:editing' = '^studio display$'
+'7:chat' = '^studio display$'
+'8:misc' = '^studio display$'
+
 # Placements
 
 # Streaming
@@ -127,6 +139,10 @@ run = 'move-node-to-workspace 5:planning'
 
 # Video and photo editing
 [[on-window-detected]]
+if.app-id = 'com.blackmagic-design.DaVinciResolve'
+run = 'move-node-to-workspace 6:editing'
+
+[[on-window-detected]]
 if.app-id = 'com.adobe.AfterEffects'
 run = 'move-node-to-workspace 6:editing'
 
@@ -156,10 +172,6 @@ run = 'move-node-to-workspace 6:editing'
 
 # Chat
 [[on-window-detected]]
-if.app-id = 'ai.elementlabs.lmstudio'
-run = 'move-node-to-workspace 7:chat'
-
-[[on-window-detected]]
 if.app-id = 'com.quora.poe.electron'
 run = 'move-node-to-workspace 7:chat'
 
@@ -180,10 +192,6 @@ if.app-id = 'net.whatsapp.WhatsApp'
 run = 'move-node-to-workspace 7:chat'
 
 # Misc
-[[on-window-detected]]
-if.app-id = 'com.jordanbaird.Ice'
-run = 'move-node-to-workspace 8:misc'
-
 [[on-window-detected]]
 if.app-id = 'net.filebot.FileBot.pkg'
 run = 'move-node-to-workspace 8:misc'

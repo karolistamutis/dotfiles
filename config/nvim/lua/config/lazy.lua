@@ -31,6 +31,8 @@ require("lazy").setup({
     -- import web extra (includes HTML, CSS, etc.)
     { import = "lazyvim.plugins.extras.lang.json" },
     { import = "lazyvim.plugins.extras.ui.mini-animate" },
+    -- import Ruby extra
+    { import = "lazyvim.plugins.extras.lang.ruby" },
     -- import/override with your plugins
     { import = "plugins" },
   },
