@@ -24,9 +24,20 @@ PROMPT='${VIRTUAL_ENV:+(${VIRTUAL_ENV:t})} '$PROMPT
 # Lazy-load work function
 autoload -U work
 
+# Create or attach to a tmux session named 'work'
 work() {
-  # Create or attach to a tmux session named 'work'
   tmux new-session -A -s work
+}
+
+# Function to cat a file and copy its content to the clipboard
+c() {
+  # Check if a filename was provided
+  if [ -z "$1" ]; then
+    echo "Usage: c <filename>" >&2 # Print usage message to standard error
+    return 1                   # Return with an error status
+  fi
+  # Execute the cat and pbcopy command
+  cat "$1" | pbcopy
 }
 
 # Lazy-load youtube functions
