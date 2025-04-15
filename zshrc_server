@@ -1,0 +1,43 @@
+# --- Oh My Zsh Configuration ---
+export ZSH="$HOME/.oh-my-zsh"
+
+ZSH_THEME="robbyrussell"
+
+plugins=(
+  git
+  tmux
+  virtualenv
+  zsh-autosuggestions
+)
+
+# Load Oh My Zsh
+source $ZSH/oh-my-zsh.sh
+
+# --- User Configuration ---
+export LANG=en_US.UTF-8
+export HIST_STAMPS="yyyy-mm-dd"
+
+# Add virtualenv indicator to prompt if applicable
+PROMPT='${VIRTUAL_ENV:+(${VIRTUAL_ENV:t})} '$PROMPT
+
+# --- Custom Functions ---
+
+# Lazy-load work function (kept as potentially useful)
+autoload -U work
+
+work() {
+  # Create or attach to a tmux session named 'work'
+  tmux new-session -A -s work
+}
+
+# --- Load Secrets ---
+# Load sensitive variables if the file exists
+if [ -f "$HOME/.secrets" ]; then
+    source "$HOME/.secrets"
+fi
+
+# --- Source Ansible managed config ---
+ANSIBLE_ZSHRC_FILE="$HOME/.zshrc_ansible"
+if [ -f "$ANSIBLE_ZSHRC_FILE" ]; then
+  source "$ANSIBLE_ZSHRC_FILE"
+fi

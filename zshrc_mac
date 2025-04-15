@@ -1,0 +1,84 @@
+export PATH="$HOME/bin:$HOME/.local/bin:/usr/local/bin:/opt/homebrew/bin:/opt/homebrew/opt/libpq/bin:/opt/homebrew/opt/mysql-client/bin:${PATH}"
+
+# Add Go paths if Go is installed
+if command -v go >/dev/null 2>&1; then
+  export GOPATH="${GOPATH:-$HOME/go}"
+  export PATH="$GOPATH/bin:$PATH"
+fi
+
+# --- Oh My Zsh Configuration ---
+export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME="robbyrussell"
+plugins=(git tmux virtualenv zsh-autosuggestions)
+source $ZSH/oh-my-zsh.sh
+
+# --- User Configuration ---
+export LANG=en_US.UTF-8
+export HIST_STAMPS="yyyy-mm-dd"
+
+# Add virtualenv indicator to prompt
+PROMPT='${VIRTUAL_ENV:+(${VIRTUAL_ENV:t})} '$PROMPT
+
+# --- Custom Functions ---
+
+# Lazy-load work function
+autoload -U work
+
+work() {
+  # Create or attach to a tmux session named 'work'
+  tmux new-session -A -s work
+}
+
+# Lazy-load youtube functions
+autoload -U youtube_on youtube_off
+
+# Helper functions for YouTube workflow
+alacritty_increase_font_size() {
+    # Assumes 'sd' (sed alternative) is installed
+    command -v sd >/dev/null && sd 'size = [0-9.]+' 'size = 40.0' ~/.config/alacritty/alacritty.toml
+}
+
+alacritty_reset_font_size() {
+    # Assumes 'sd' (sed alternative) is installed
+    command -v sd >/dev/null && sd 'size = [0-9.]+' 'size = 16.0' ~/.config/alacritty/alacritty.toml
+}
+
+tmux_youtube_session() {
+  # Only start/attach if not already inside tmux
+  if [ -z "$TMUX" ]; then
+    if tmux has-session -t youtube 2>/dev/null; then
+      tmux attach-session -t youtube
+    else
+      tmux new-session -s youtube
+    fi
+  fi
+}
+
+# Main YouTube workflow functions
+yt_on() {
+  alacritty_increase_font_size
+  # Ensure target directory exists or handle error
+  local yt_dir="$HOME/Projects/youtube"
+  if [[ -d "$yt_dir" ]]; then
+    cd "$yt_dir" && tmux_youtube_session
+  else
+    echo "Warning: YouTube project directory not found at $yt_dir" >&2
+  fi
+}
+
+yt_off() {
+  alacritty_reset_font_size
+}
+
+# --- Environment Variables ---
+# macOS specific - LM Studio
+export PATH="$PATH:$HOME/.cache/lm-studio/bin"
+
+# --- Load Secrets ---
+if [ -f "$HOME/.secrets" ]; then
+    source "$HOME/.secrets"
+fi
+
+# --- Source Ansible managed config if it exists ---
+ANSIBLE_ZSHRC_FILE="$HOME/.zshrc_ansible"
+[ -f "$ANSIBLE_ZSHRC_FILE" ] && source "$ANSIBLE_ZSHRC_FILE"

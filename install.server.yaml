@@ -1,2 +1,5 @@
+- link:
+    ~/.zshrc: zshrc_server # Link to the Server version
+
 - shell:
     - [echo "Setting up server-specific configurations", Setting up server]

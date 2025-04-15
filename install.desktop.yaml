@@ -1,4 +1,5 @@
 - link:
+    ~/.zshrc: zshrc_mac
     ~/.config/aerospace: config/aerospace
     ~/.config/alacritty: config/alacritty
 
