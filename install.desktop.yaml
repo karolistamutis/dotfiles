@@ -1,5 +1,6 @@
 - link:
     ~/.zshrc: zshrc_mac
+    ~/.tmux.conf: tmux.conf.mac
     ~/.config/aerospace: config/aerospace
     ~/.config/alacritty: config/alacritty
 

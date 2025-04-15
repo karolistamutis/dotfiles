@@ -1,3 +1,5 @@
+# ~/.dotfiles/tmux.conf.server
+
 # Set true color
 set-option -sa terminal-overrides ",xterm*:Tc"
 
@@ -34,25 +36,30 @@ set-window-option -g mode-keys vi
 
 # Vim style pane selection
 bind h select-pane -L
-bind j select-pane -D 
+bind j select-pane -D
 bind k select-pane -U
 bind l select-pane -R
 
-# Use v to trigger selection    
+# Use v to trigger selection
 bind-key -T copy-mode-vi v send-keys -X begin-selection
 
-# Use y to yank current selection
-bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "pbcopy"
+# --- Clipboard Integration (Linux - requires xclip) ---
+# Make sure 'xclip' is installed (`sudo apt install xclip`)
 
-# Update default binding of `Enter` to also use copy-pipe
+# Use y to yank current selection to system clipboard
+bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "xclip -selection clipboard -i"
+
+# Update default binding of `Enter` to also copy to system clipboard
 unbind -T copy-mode-vi Enter
-bind-key -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel "pbcopy"
+bind-key -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel "xclip -selection clipboard -i"
 
-# Bind ']' to use pbpaste
-bind ] run "pbpaste | tmux load-buffer - && tmux paste-buffer"
+# Bind ']' to paste from system clipboard
+bind ] run "xclip -selection clipboard -o | tmux load-buffer - && tmux paste-buffer"
 
-# Copy on mouse selection
-bind-key -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel "pbcopy"
+# Copy on mouse selection to system clipboard
+bind-key -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel "xclip -selection clipboard -i"
+# --- End Clipboard Integration ---
+
 
 # Split panes
 bind | split-window -h -c "#{pane_current_path}"  # Split horizontally
@@ -70,42 +77,34 @@ bind -r Down resize-pane -D 5
 bind -r Up resize-pane -U 5
 bind -r Right resize-pane -R 5
 
-# List of plugins
+# List of plugins (TPM)
 set -g @plugin 'tmux-plugins/tpm'
 set -g @plugin 'tmux-plugins/tmux-sensible'
 set -g @plugin 'christoomey/vim-tmux-navigator'
-set -g @plugin 'tmux-plugins/tmux-yank'
+set -g @plugin 'tmux-plugins/tmux-yank' # Relies on pbcopy/xclip for system clipboard
 
 # Catppuccin theme
 set -g @plugin 'catppuccin/tmux'
-set -g @catppuccin_flavour 'mocha' # or frappe, macchiato, latte
+set -g @catppuccin_flavour 'mocha'
 
 # Catppuccin config
 set -g @catppuccin_window_left_separator ""
 set -g @catppuccin_window_right_separator " "
 set -g @catppuccin_window_middle_separator " █"
 set -g @catppuccin_window_number_position "right"
-
 set -g @catppuccin_window_default_fill "number"
 set -g @catppuccin_window_default_text "#W"
-
 set -g @catppuccin_window_current_fill "number"
 set -g @catppuccin_window_current_text "#W"
-
-# Gitmux config
+set -g @catppuccin_status_modules_left "session host directory application" # Added host
+set -g @catppuccin_status_modules_right "gitmux" # Ensure gitmux installed & configured separately
 set -g @catppuccin_gitmux_text "#(gitmux -cfg $HOME/.gitmux.conf \"#{pane_current_path}\")"
-
-set -g @catppuccin_status_modules_right "gitmux"
 set -g @catppuccin_status_left_separator  " "
 set -g @catppuccin_status_right_separator ""
 set -g @catppuccin_status_right_separator_inverse "no"
 set -g @catppuccin_status_fill "icon"
 set -g @catppuccin_status_connect_separator "no"
-
 set -g @catppuccin_directory_text "#{pane_current_path}"
-
-# For better macOS clipboard support
-set-option -g default-command "reattach-to-user-namespace -l $SHELL"
 
 # Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
 run '~/.tmux/plugins/tpm/tpm'
